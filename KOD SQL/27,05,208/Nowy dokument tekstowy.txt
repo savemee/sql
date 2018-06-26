@@ -1,0 +1,55 @@
+create or replace PACKAGE pakiet_1 AS
+procedure add_value(p1 Number:=100,p2 number default 200);
+procedure update_kurs(p_nazwa in KURSY.nazwa%Type,pp_nazwa in KURSY.nazwa%Type);
+procedure wstaw_kurs (w_id KURSY.ID_KURSU%TYPE, w_nazwa KURSY.NAZWA%type , w_liczba_godzin KURSY.LICZBA_GODZIN%type);
+
+END pakiet_1;
+/
+
+create or replace PACKAGE BODY pakiet_1 AS
+procedure add_value
+(p1 Number:=100,p2 number default 200)
+IS p3 number;
+begin 
+p3:=p1 + p2;
+DBMS_OUTPUT.PUT_LINE('resault is : '|| p3);
+end;
+procedure update_kurs(
+p_nazwa in KURSY.nazwa%Type,
+pp_nazwa in KURSY.nazwa%Type)
+AS
+p_id_kursu KURSY.ID_KURSU%Type;
+BEGIN
+
+select id_kursu  into p_id_kursu from KURSY where NAZWA = p_nazwa;
+update kursy set KURSY.nazwa= pp_nazwa where p_id_kursu = kursy.ID_KURSU;
+END;
+
+ procedure wstaw_kurs
+(w_id KURSY.ID_KURSU%TYPE, w_nazwa KURSY.NAZWA%type , w_liczba_godzin KURSY.LICZBA_GODZIN%type) IS 
+
+BEGIN
+Insert into kursy values (w_id,w_nazwa, w_liczba_godzin);
+Commit;
+EXCEPTION
+WHEN DUP_VAL_ON_INDEX THEN
+DBMS_OUTPUT.PUT_LINE('Duplikat');
+END;
+
+ function oblicziloscgodzinkursu(
+p_nazwa in KURSY.NAZWA%TYPE) 
+RETURN NUMBER 
+as liczba number;
+BEGIN
+select sum(liczba_godzin) into liczba from kursy where kursy.nazwa = p_nazwa;
+return liczba;
+END oblicziloscgodzinkursu;
+END pakiet_1;
+/
+
+Declare 
+BEGIN
+pakiet_1.oblicziloscgodzinkursu('SKUTECZNY SPRZEDAWCA');
+END;
+/
+

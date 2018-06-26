@@ -1,0 +1,100 @@
+create table test(
+id int,
+imie varchar(10),
+nazwisko varchar(20)
+)
+
+insert into test values(1,'Filip','Filip')
+
+select * from test
+
+insert into test values(2,'Filip','Filip'),(3,'Filip','Filip')
+insert into test values(4,'Filip','Filip')
+rollback;
+
+insert into test values(5,'Filip','Filip');
+commit;
+
+--copy (select * from test) to 'C:\Users\SaveMe\Documents\xxx.csv' with csv
+
+CREATE TABLE contacts (
+ id serial PRIMARY KEY,
+ name VARCHAR (100),
+ phones TEXT []
+);
+
+3
+4
+5
+6
+7
+INSERT INTO contacts (name, phones)
+VALUES
+ (
+ 'John Doe',
+ ARRAY [ '(408)-589-5846',
+ '(408)-589-5555' ]
+ );
+
+INSERT INTO contacts (name, phones)
+VALUES
+ (
+ 'Lily Bush',
+ '{"(408)-589-5841"}'
+ ),
+ (
+ 'William Gate',
+ '{"(408)-589-5842","(408)-589-58423"}'
+ );
+ 
+ SELECT
+ name,
+ phones [ 1 ]
+FROM
+ contacts;
+ 
+  cREATE EXTENSION hstore;
+CREATE TABLE books (
+ id serial primary key,
+ title VARCHAR (255),
+ attr Hstore
+);
+INSERT INTO books (title, attr)
+VALUES
+ (
+ 'PostgreSQL Tutorial',
+ '"paperback" => "243",
+    "publisher" => "postgresqltutorial.com",
+    "language"  => "English",
+    "ISBN-13"   => "978-1449370000",
+ "weight"    => "11.2 ounces"'
+ )
+ 
+ SELECT
+ attr
+FROM
+ books
+
+SELECT
+ attr -> 'ISBN-13' AS isbn
+FROM
+ books
+ 
+ 
+ SELECT
+ attr -> 'weight' AS weight
+FROM
+ books
+WHERE
+ attr -> 'ISBN-13' = '978-1449370000';
+ 
+ 
+ 
+ 
+
+SELECT
+ title
+FROM
+ books
+WHERE
+ attr ?& ARRAY [ 'language', 'weight' ];

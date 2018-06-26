@@ -1,0 +1,162 @@
+select pp.nazwa,p.zawod,sum(p.pensja)
+from pracownicy p join placowki pp on p.id_placowki=pp.id_placowki
+group by p.zawod,pp.nazwa;
+
+select pp.nazwa,p.zawod,sum(p.pensja)
+from pracownicy p join placowki pp on p.id_placowki=pp.id_placowki
+group by cube(pp.nazwa,p.zawod);
+
+select pp.nazwa,p.zawod,sum(p.pensja)
+from pracownicy p join placowki pp on p.id_placowki=pp.id_placowki
+group by rollup(pp.nazwa,p.zawod);
+
+
+CREATE OR REPLACE PROCEDURE lista_pracownikow
+(p_nazwa placowki.nazwa%TYPE) IS
+CURSOR k_osoba IS 
+SELECT pr.imie imie, pr.nazwisko nazwisko
+FROM pracownicy pr JOIN placowki pl ON pr.id_placowki=pl.id_placowki
+WHERE p_nazwa=pl.nazwa
+ORDER BY 2 ASC, 1 ASC;
+z_imie pracownicy.imie%TYPE;
+z_nazwisko pracownicy.nazwisko%TYPE;
+BEGIN
+FOR z_rekord IN k_osoba LOOP
+DBMS_OUTPUT.PUT_LINE(z_rekord.imie||' '||z_rekord.nazwisko);
+END LOOP;
+END;
+/
+
+BEGIN
+LISTA_PRACOWNIKOW('BIURO');
+END;
+/
+
+
+
+Declare 
+z_imie Varchar2(10) := 'Filip';
+z_nazwisko Varchar2(10) := 'tak';
+BEGIN
+DBMS_OUTPUT.PUT_LINE(z_imie||z_nazwisko);
+END;
+/
+
+BEGIN
+DBMS_OUTPUT.PUT_LINE('dzis'|| sysdate);
+END;
+/
+
+DeCLARE 
+z_id pracownicy.id_pracownika%TYPE;
+z_imie PRACOWNICY.IMIE%TYPE;
+z_nazwisko PRACOWNICY.NAZWISKO%TYPE;
+BEGIN
+SELECT id_pracownika,imie,nazwisko
+INTO z_id,z_imie,z_nazwisko
+FROM PRACOWNICY
+WHERE id_pracownika =10;
+DBMS_OUTPUT.put_line(z_imie||' '||z_nazwisko||' '|| z_id);
+EXCEPTION
+WHEN no_data_found then
+DBMS_OUTPUT.PUT_line('nie znaleziono');
+END;
+/
+
+DECLARE 
+z_zawod pracownicy.zawod%type;
+z_pensja pracownicy.pensja%type;
+CURSOR zawody IS select distinct(zawod) from pracownicy;
+CURSOR zawodys IS Select MIN(pensja) pensja_min ,MAX(pensja) pensja_max ,ROUND(AVG(pensja)) pensja_avg,zawod ,count(zawod) zawody_ilosc from pracownicy group by zawod;
+BEGIN
+
+FOR zz IN zawodys LOOP
+
+DBMS_OUTPUT.put_line(zz.zawody_ilosc||' '||zz.zawod||' ' || ' '|| zz.pensja_min ||' '||zz.pensja_max|| ' '||zz.pensja_avg);
+END LOOP;
+END;
+/
+
+
+
+DECLARE 
+z_zmienna  pracownicy.zawod%TYPE;
+CURSOR kursorjawny IS Select DISTINCT(zawod) from pracownicy;
+BEGIN
+OPEN kursorjawny;
+LOOP
+FETCH kursorjawny INTO z_zmienna;
+EXIT WHEN kursorjawny%NOTFOUND;
+DBMS_OUTPUT.put_line('zawod: '||z_zmienna);
+END LOOP;
+cLOSE kursorjawny;
+END;
+/
+
+
+DECLARE
+z_imie pracownicy.imie%type;
+z_nazwisko pracownicy.nazwisko%type;
+Cursor kursorj is select imie ,nazwisko from pracownicy;
+BEGIN
+open kursorj;
+LOOP
+FETCH kursorj into z_imie,z_nazwisko;
+EXIT WHEN kursorj%NOTFOUND;
+DBMS_OUTPUT.put_line(z_imie||' '||z_nazwisko);
+END LOOP;
+close kursorj;
+END;
+/
+
+DECLARE
+z_imie pracownicy.imie%type;
+z_nazwisko pracownicy.nazwisko%type;
+Cursor kursorj is select imie ,nazwisko from pracownicy;
+BEGIN
+open kursorj;
+FETCH kursorj into z_imie,z_nazwisko;
+While kursorj%found 
+loop
+
+DBMS_OUTPUT.put_line(z_imie||' '||z_nazwisko);
+FETCH kursorj into z_imie,z_nazwisko;
+end loop;
+
+close kursorj;
+END;
+/
+
+DECLARE 
+Cursor kursorj is select imie ,nazwisko from pracownicy;
+BEGIN
+for z_kursor in kursorj loop
+DBMS_OUTPUT.put_line(z_kursor.imie||' '||z_kursor.nazwisko);
+end loop;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE lista_pracownikow
+(p_nazwa placowki.nazwa%TYPE) IS
+CURSOR k_osoba IS 
+SELECT pr.imie imie, pr.nazwisko nazwisko
+FROM pracownicy pr JOIN placowki pl ON pr.id_placowki=pl.id_placowki
+WHERE p_nazwa=pl.nazwa
+ORDER BY 2 ASC, 1 ASC;
+BEGIN
+FOR z_rekord IN k_osoba LOOP
+DBMS_OUTPUT.PUT_LINE(z_rekord.imie||' '||z_rekord.nazwisko);
+END LOOP;
+END;
+/
+
+select id_pracownika
+from pracownicy
+where mod(id_praccownika,2)=0 AND NVL(dodatek,0)=0;
+
+select NVL(null,0)
+from dual;
+
+select id_pracownika,dodatek
+from pracownicy
+where mod(id_pracownika,2)=0 AND NVL(dodatek,0)=0;

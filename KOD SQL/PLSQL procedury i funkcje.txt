@@ -1,0 +1,30 @@
+--------------------------------------------
+SYSTEM					   |
+--------------------------------------------
+
+
+--------------------------------------------
+SAVEME 					   |
+--------------------------------------------
+
+create or replace procedure add_value
+(p1 Number:=100,p2 number default 200)
+IS p3 number;
+begin 
+p3:=p1 + p2;
+DBMS_OUTPUT.PUT_LINE('resault is : '|| p3);
+end;
+/
+
+
+execute ADD_VALUE; -- resault 300
+execute ADD_VALUE(); -- resault 300
+execute ADD_VALUE(p2=>100); -- resault 200
+execute ADD_VALUE(1,2); -- resault 3
+execute ADD_VALUE(1); -- resault 201
+
+Begin
+ADD_VALUE;
+end;
+
+

@@ -1,0 +1,31 @@
+create or replace procedure update_kurs(
+p_nazwa in KURSY.nazwa%Type,
+pp_nazwa in KURSY.nazwa%Type)
+AS
+p_id_kursu KURSY.ID_KURSU%Type;
+BEGIN
+select id_kursu  into p_id_kursu from KURSY where NAZWA = p_nazwa;
+update kursy set KURSY.nazwa= pp_nazwa where p_id_kursu = kursy.ID_KURSU;
+END;
+
+declare 
+p_id_kursu KURSY.ID_KURSU%Type;
+p_nazwa KURSY.NAZWA%Type := 'cos';
+begin 
+select id_kursu  into p_id_kursu from KURSY where NAZWA = p_nazwa;
+DBMS_OUTPUT.PUT_LINE(p_id_kursu);
+end;
+
+--call update_kurs('cos','ala');
+
+create or replace function oblicziloscgodzinkursu(
+p_nazwa in KURSY.NAZWA%TYPE) 
+RETURN NUMBER 
+as liczba number;
+BEGIN
+select sum(liczba_godzin) into liczba from kursy where kursy.nazwa = p_nazwa;
+return liczba;
+END oblicziloscgodzinkursu;
+
+select OBLICZILOSCGODZINKURSU('NOWOCZESNA REKLAMA')
+from dual;

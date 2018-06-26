@@ -1,0 +1,34 @@
+SYSTEM
+Create user user1 identified by user1;
+
+grant create session to user1;
+
+grant select  on saveme.wyksztalcenie to user1;
+
+create or replace synonym SYSTEM.haha for SAVEME.WYKSZTALCENIE;
+
+select * from haha
+
+
+
+create role rola1;
+
+create user user2 identified by user2;
+grant select on saveme.wyksztalcenie to user2;
+grant CREATE SESSION  to user2;
+
+
+
+USER!
+select * from all_users;
+
+select * from saveme.wyksztalcenie;
+
+create or replace synonym user1.haha for SAVEME.WYKSZTALCENIE;
+
+
+SAVEME
+
+
+USER2
+select * from saveme.wyksztalcenie;

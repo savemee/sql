@@ -1,0 +1,89 @@
+create or replace function oblicziloscgodzinkursu(
+p_nazwa in KURSY.NAZWA%TYPE) 
+RETURNS integer as $$
+DECLARE 
+liczba Integer;
+BEGIN
+select sum(liczba_godzin) into liczba from kursy where kursy.nazwa = p_nazwa;
+return liczba;
+END; $$
+
+Language plpgsql;
+select * from kursy
+
+select * from pracownicy  where pensja=1200;
+--kursory
+create or replace function kursorpensja(k_pensja INTEGER)
+RETURNS text AS $$
+DECLARE
+title text default '';
+rec_pensja RECORD;
+cur_pensja CURSOR(k_pensja integer)
+FOR SELECT *
+From pracownicy
+where pensja = k_pensja;
+BEGIN
+Open cur_pensja(k_pensja);
+LOOP 
+FETcH cur_pensja into rec_pensja;
+EXIT WHEN NOT FOUND;
+title := title || ',' || rec_pensja.imie ;
+END LOOP;
+close cur_pensja;
+
+RETURN title;
+END; $$
+LANGUAGE plpgsql;
+
+select  kursorpensja(1200)
+
+
+
+
+
+select oblicziloscgodzinkursu('NOWOCZESNA REKLAMA')
+
+
+DO $$ 
+DECLARE
+   created_at time := now();
+BEGIN 
+   RAISE NOTICE '%', created_at;
+END $$;
+
+DO $$
+DECLARE
+   a integer := 10;
+   b integer := 10;
+BEGIN 
+  IF a > b THEN 
+     RAISE NOTICE 'a is greater than b';
+  ELSIF a < b THEN
+     RAISE NOTICE 'a is less than b';
+  ELSE
+     RAISE NOTICE 'a is equal to b';
+  END IF;
+END $$;
+
+CREATE OR REPLACE FUNCTION fibonacci (n INTEGER) 
+ RETURNS INTEGER AS $$ 
+DECLARE
+   counter INTEGER := 0 ; 
+   i INTEGER := 0 ; 
+   j INTEGER := 1 ;
+BEGIN
+ 
+ IF (n < 1) THEN
+ RETURN 0 ;
+ END IF; 
+ 
+ WHILE counter <= n LOOP
+ counter := counter + 1 ; 
+ SELECT j, i + j INTO i, j ;
+ END LOOP ; 
+ 
+ RETURN i ;
+END ; $$
+Language plpgsql;
+
+select fibonacci(5)	
